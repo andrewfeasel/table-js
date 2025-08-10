@@ -24,4 +24,17 @@ describe("table.js test suite", () => {
     const thingy_table = new Table(thingy, "|");
     assert.strictEqual(thingy_table.toString(), 'status|name\n1|banana\n2|orange');
   });
+  it("when an array of objects is passed, the keys must be consistent", () => {
+    const bad_array = [];
+    bad_array.push({foo: "bar", bar: "foo"}); // good so far
+    bad_array.push({bad: "object", error: true}); // bad
+    assert.throws(() => new Table(bad_array));
+  });
+  it("same thing with Table.prototype.addEntry()", () => {
+    const normal_table = new Table();
+    normal_table.addEntry({foo: "bar", bar: "baz"}); // good so far
+    assert.throws(() => {
+      normal_table.addEntry({error: true, bad: true});
+    })
+  })
 })
