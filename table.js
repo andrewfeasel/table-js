@@ -14,7 +14,7 @@ export default class Table {
       this.headers = Object.keys(obj[0]).join(this.delimiter);
       this.records = obj.map(row => Object.values(row).join(this.delimiter))
     } else if (!Array.isArray(obj)) {
-      if(Object.keys(obj).length < 0) {
+      if(Object.keys(obj).length == 0) {
         this.headers = "";
         this.records = [];
       } else {
@@ -32,7 +32,6 @@ export default class Table {
     } else if(Object.keys(obj).join(this.delimiter) !== this.headers) {
       throw new Error("Inconsistently keyed object array was passed to Table constructor");
     }
-
     this.records.push(Object.values(obj).join(this.delimiter));
   }
   toString(){
