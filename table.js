@@ -12,6 +12,9 @@ export default class Table {
       this.records = []
     }
   }
+  static fromJSON(json, delimiter) {
+    return new Table(JSON.parse(json), delimiter);
+  }
   addEntry(obj) {
     this.records.push(Object.values(obj).join(this.delimiter));
   }
