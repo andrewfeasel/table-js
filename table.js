@@ -1,4 +1,4 @@
-export class Table {
+export default class Table {
   constructor(obj, delimiter) {
     this.delimiter = delimiter;
     if(Array.isArray(obj) && obj.length > 0) {
@@ -15,8 +15,10 @@ export class Table {
   addEntry(obj) {
     this.records.push(Object.values(obj).join(this.delimiter));
   }
+  toString(){
+    return `${this.headers}\n${this.records.join("\n")}`;
+  }
   print(){
-    console.log(this.headers);
-    console.log(this.records.join("\n"));
+    console.log(this.toString());
   }
 }
