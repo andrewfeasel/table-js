@@ -26,15 +26,26 @@ describe("table.js test suite", () => {
   });
   it("when an array of objects is passed, the keys must be consistent", () => {
     const bad_array = [];
-    bad_array.push({foo: "bar", bar: "foo"}); // good so far
-    bad_array.push({bad: "object", error: true}); // bad
+    bad_array.push({foo: "bar", bar: "foo"});
+    bad_array.push({bad: "object", error: true});
     assert.throws(() => new Table(bad_array));
   });
   it("same thing with Table.prototype.addEntry()", () => {
     const normal_table = new Table();
-    normal_table.addEntry({foo: "bar", bar: "baz"}); // good so far
+    normal_table.addEntry({foo: "bar", bar: "baz"});
     assert.throws(() => {
       normal_table.addEntry({error: true, bad: true});
+    })
+  });
+  it("can use Table.prototype.addEntries to insert an array of objects", () => {
+    const valid_entries = [
+      {foo: "bar", bar: "baz"},
+      {foo: "fighter", bar: "lead bar"}
+    ];
+    const the_table = new Table();
+    assert.doesNotThrow(() => {
+      the_table.addEntries(valid_entries);
+      assert.strictEqual(the_table.toString(), 'foo|bar\nbar|baz\nfighter|lead bar');
     })
   })
 })
