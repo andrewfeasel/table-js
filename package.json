@@ -2,5 +2,22 @@
   "type": "module",
   "scripts": {
     "test": "node --test table.test.js"
-  }
+  },
+  "name": "table-js",
+  "version": "1.0.0",
+  "description": "JS object(s) -> parseable structured table",
+  "main": "table.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andrewfeasel/table-js.git"
+  },
+  "keywords": [
+    "table",
+    "structure",
+    "data",
+    "parse"
+  ],
+  "author": "Andrew Feasel",
+  "license": "MIT",
+  "files": [ "./table.js" ]
 }
