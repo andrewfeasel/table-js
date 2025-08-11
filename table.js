@@ -9,32 +9,49 @@ function consistentKeyCheck(obj_list) {
 }
 
 export default class Table {
+  #delimiter = "|";
+  #headers = "";
+  #records = [];
   constructor(obj = {}, delimiter = "|") {
-    this.delimiter = delimiter;
+    this.#delimiter = delimiter;
     if(Array.isArray(obj) && obj.length > 0) {
       consistentKeyCheck(obj);
-      this.headers = Object.keys(obj[0]).join(this.delimiter);
-      this.records = obj.map(row => Object.values(row).join(this.delimiter))
+      this.#headers = Object.keys(obj[0]).join(this.#delimiter);
+      this.#records = obj.map(row => Object.values(row).join(this.#delimiter))
     } else if (!Array.isArray(obj)) {
       if(Object.keys(obj).length == 0) {
-        this.headers = "";
-        this.records = [];
+        this.#headers = "";
+        this.#records = [];
       } else {
-        this.headers = Object.keys(obj).join(this.delimiter);
-        this.records = [Object.values(obj).join(this.delimiter)];
+        this.#headers = Object.keys(obj).join(this.#delimiter);
+        this.#records = [Object.values(obj).join(this.#delimiter)];
       }
     }
+  }
+  get delimiter() {
+    return this.#delimiter;
+  }
+  get headers() {
+    return this.#headers;
+  }
+  get records() {
+    return this.#records;
+  }
+  static copy(a, b) {
+    b.#delimiter = a.#delimiter;
+    b.#records = a.#records;
+    b.#headers = a.#headers;
   }
   static fromJSON(json, delimiter) {
     return new Table(JSON.parse(json), delimiter);
   }
   addEntry(obj) {
-    if(this.headers === "") {
-      this.headers = Object.keys(obj).join(this.delimiter);
-    } else if(Object.keys(obj).join(this.delimiter) !== this.headers) {
+    if(this.#headers === "") {
+      this.#headers = Object.keys(obj).join(this.#delimiter);
+    } else if(Object.keys(obj).join(this.#delimiter) !== this.#headers) {
       throw new Error("Inconsistently keyed object array was passed to Table constructor");
     }
-    this.records.push(Object.values(obj).join(this.delimiter));
+    this.#records.push(Object.values(obj).join(this.#delimiter));
   }
   addEntries(obj_list) {
     if(!Array.isArray(obj_list)) { throw new Error('Non-array object passed to Table.prototype.addEntries()'); }
@@ -45,7 +62,7 @@ export default class Table {
     }
   }
   toString(){
-    return `${this.headers}\n${this.records.join("\n")}`;
+    return `${this.#headers}\n${this.#records.join("\n")}`;
   }
   print(){
     console.log(this.toString());
@@ -54,7 +71,7 @@ export default class Table {
     const rows = this.toString().split("\n");
 
     let th_list = rows.shift()
-    .split(this.delimiter)
+    .split(this.#delimiter)
     .map(data => `<th>${data}</th>`)
     .join("");
     th_list = `<tr>${th_list}</tr>`;
@@ -62,7 +79,7 @@ export default class Table {
     let record_list = [];
     for(let i = 0; i < rows.length; i++) {
       let current_record = rows[i]
-      .split(this.delimiter)
+      .split(this.#delimiter)
       .map(data => `<td>${data}</td>`)
       .join("");
       current_record = `<tr>${current_record}</tr>`;
@@ -70,5 +87,9 @@ export default class Table {
     }
     record_list = record_list.join("");
     return `<table>${th_list}${record_list}</table>`;
+  }
+  empty(){
+    this.#headers = "";
+    this.#records = [];
   }
 }

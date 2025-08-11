@@ -54,4 +54,17 @@ describe("table.js test suite", () => {
     const html = t.toHtmlTableString();
     assert.strictEqual(html, '<table><tr><th>foo</th><th>bar</th></tr><tr><td>bar</td><td>baz</td></tr></table>');
   });
+  it("can be emptied", () => {
+    const t = new Table();
+    t.addEntry({foo: "bar", bar: "baz"});
+    t.empty();
+    assert.strictEqual(t.toString(), "\n");
+  });
+  it("can be copied", () => {
+    const t1 = new Table();
+    t1.addEntry({foo: "bar", bar: "baz"});
+    const t2 = new Table();
+    Table.copy(t1, t2);
+    assert.strictEqual(t2.toString(), "foo|bar\nbar|baz")
+  })
 })
