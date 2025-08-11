@@ -1,3 +1,6 @@
+const delimit_keys = (obj, delimiter) => Object.keys(obj).map(String).join(delimiter);
+const delimit_values = (obj, delimiter) => Object.values(obj).map(String).join(delimiter);
+
 function consistentKeyCheck(obj_list) {
   const firstKeys = JSON.stringify(Object.keys(obj_list[0]).map(String));
 
@@ -8,7 +11,7 @@ function consistentKeyCheck(obj_list) {
   if(!consistency) { throw new Error("Inconsistently keyed object array was passed to Table constructor"); }
 }
 
-export default class Table {
+class Table {
   #delimiter = "|";
   #headers = "";
   #records = [];
@@ -16,15 +19,15 @@ export default class Table {
     this.#delimiter = delimiter;
     if(Array.isArray(obj) && obj.length > 0) {
       consistentKeyCheck(obj);
-      this.#headers = Object.keys(obj[0]).map(String).join(this.#delimiter);
-      this.#records = obj.map(row => Object.values(row).map(String).join(this.#delimiter))
+      this.#headers = delimit_keys(obj[0], this.#delimiter);
+      this.#records = obj.map(row => delimit_values(row, this.#delimiter));
     } else if (!Array.isArray(obj)) {
       if(Object.keys(obj).length == 0) {
         this.#headers = "";
         this.#records = [];
       } else {
-        this.#headers = Object.keys(obj).map(String).join(this.#delimiter);
-        this.#records = [Object.values(obj).map(String).join(this.#delimiter)];
+        this.#headers = delimit_keys(obj, this.#delimiter);
+        this.#records = [delimit_values(obj, this.#delimiter)];
       }
     }
   }
@@ -47,11 +50,11 @@ export default class Table {
   }
   addEntry(obj) {
     if(this.#headers === "") {
-      this.#headers = Object.keys(obj).map(String).join(this.#delimiter);
-    } else if(Object.keys(obj).map(String).join(this.#delimiter) !== this.#headers) {
+      this.#headers = delimit_keys(obj, this.#delimiter);
+    } else if(delimit_keys(obj, this.#delimiter) !== this.#headers) {
       throw new Error("Inconsistently keyed object array was passed to Table constructor");
     }
-    this.#records.push(Object.values(obj).map(String).join(this.#delimiter));
+    this.#records.push(delimit_values(obj, this.#delimiter));
   }
   addEntries(obj_list) {
     if(!Array.isArray(obj_list)) { throw new Error('Non-array object passed to Table.prototype.addEntries()'); }
@@ -93,3 +96,5 @@ export default class Table {
     this.#records = [];
   }
 }
+
+export default Table;
