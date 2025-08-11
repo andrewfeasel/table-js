@@ -50,4 +50,25 @@ export default class Table {
   print(){
     console.log(this.toString());
   }
+  toHtmlTableString() {
+    const rows = this.toString().split("\n");
+
+    let th_list = rows.shift()
+    .split(this.delimiter)
+    .map(data => `<th>${data}</th>`)
+    .join("");
+    th_list = `<tr>${th_list}</tr>`;
+
+    let record_list = [];
+    for(let i = 0; i < rows.length; i++) {
+      let current_record = rows[i]
+      .split(this.delimiter)
+      .map(data => `<td>${data}</td>`)
+      .join("");
+      current_record = `<tr>${current_record}</tr>`;
+      record_list.push(current_record);
+    }
+    record_list = record_list.join("");
+    return `<table>${th_list}${record_list}</table>`;
+  }
 }

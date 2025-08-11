@@ -47,5 +47,11 @@ describe("table.js test suite", () => {
       the_table.addEntries(valid_entries);
       assert.strictEqual(the_table.toString(), 'foo|bar\nbar|baz\nfighter|lead bar');
     })
-  })
+  });
+  it("can be turned into an HTML <table> object", () => {
+    const t = new Table();
+    t.addEntry({foo: "bar", bar: "baz"});
+    const html = t.toHtmlTableString();
+    assert.strictEqual(html, '<table><tr><th>foo</th><th>bar</th></tr><tr><td>bar</td><td>baz</td></tr></table>');
+  });
 })
