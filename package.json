@@ -1,7 +1,9 @@
 {
   "type": "module",
   "scripts": {
-    "test": "node --test table.test.js"
+    "test": "node --test ./src/table.test.js",
+    "minify": "npx esbuild ./src/table.js --minify --outfile=./dist/table.min.js",
+    "clean": "find ./dist -name '*.js' -delete"
   },
   "name": "table-js",
   "version": "1.0.0",
@@ -19,5 +21,10 @@
   ],
   "author": "Andrew Feasel",
   "license": "MIT",
-  "files": [ "./table.js" ]
+  "files": [
+    "./table.js"
+  ],
+  "devDependencies": {
+    "esbuild": "^0.25.8"
+  }
 }
